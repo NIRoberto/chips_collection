@@ -5,13 +5,10 @@ import 'package:chips_collection/Widgets/product.dart';
 import 'package:chips_collection/data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({
-    super.key,
-  });
+  const ProductsScreen({super.key});
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -59,72 +56,69 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ],
         ),
       ),
-      body: Stack(children: [
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Filter categories
-              SizedBox(
-                height: 60.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return FilterCategory(
-                      category: categories[index],
-                      index: index,
-                      isSelected: selectedCategory == categories[index],
-                      onTap: () {
-                        setState(() {
-                          selectedCategory = categories[index];
-                        });
-                      },
-                    );
-                  },
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Filter categories
+                SizedBox(
+                  height: 60.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return FilterCategory(
+                        category: categories[index],
+                        index: index,
+                        isSelected: selectedCategory == categories[index],
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = categories[index];
+                          });
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        text: selectedCategory.name,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 28.0,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ' Collections',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28.0,
-                            ),
+                const SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: selectedCategory.name,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 28.0,
                           ),
-                        ],
+                          children: [
+                            TextSpan(
+                              text: ' Collections',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_right_alt,
-                      size: 30.0,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    )
-                  ],
+                      Icon(
+                        Icons.arrow_right_alt,
+                        size: 30.0,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              // Products
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.55,
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Expanded(
+                const SizedBox(height: 16.0),
+                // Products
+                Expanded(
                   child: PageView.builder(
-                    pageSnapping: true,
                     itemCount: selectedCategory.name == 'All'
                         ? products.length
                         : products
@@ -132,19 +126,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 element.category == selectedCategory.name)
                             .length,
                     itemBuilder: (context, index) {
+                      final product = selectedCategory.name == 'All'
+                          ? products[index]
+                          : products
+                              .where((element) =>
+                                  element.category == selectedCategory.name)
+                              .toList()[index];
+
                       return ProductCard(
                         onTap: () {
                           context.go(
-                              '/products/${selectedCategory.name == 'All' ? products[index].id : products.where((element) => element.category == selectedCategory.name).toList()[index].id}',
-                              extra: {
-                                'product': selectedCategory.name == 'All'
-                                    ? products[index]
-                                    : products
-                                        .where((element) =>
-                                            element.category ==
-                                            selectedCategory.name)
-                                        .toList()[index]
-                              });
+                            '/products/${product.id}',
+                            extra: {'product': product},
+                          );
                         },
                         paddingH: 24.0,
                         paddingV: 12.0,
@@ -153,107 +147,97 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         borderRadius: 40.0,
                         onAddToCart: () {
                           setState(() {
-                            chipsInCart.add(selectedCategory.name == 'All'
-                                ? products[index]
-                                : products
-                                    .where((element) =>
-                                        element.category ==
-                                        selectedCategory.name)
-                                    .toList()[index]);
+                            chipsInCart.add(product);
                           });
                         },
-                        product: selectedCategory.name == 'All'
-                            ? products[index]
-                            : products
-                                .where((element) =>
-                                    element.category == selectedCategory.name)
-                                .toList()[index],
+                        product: product,
                       );
                     },
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        if (chipsInCart.isNotEmpty)
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: () {
-                context.go('/cart', extra: {'products': chipsInCart});
-              },
-              child: Container(
-                height: 100.0,
-                margin: const EdgeInsets.only(top: 2.0),
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0),
+          if (chipsInCart.isNotEmpty)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  context.go('/checkout', extra: {'products': chipsInCart});
+                },
+                child: Container(
+                  height: 100.0,
+                  margin: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25.0),
+                      topRight: Radius.circular(25.0),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(100.0),
-                          ),
-                          child: Text(
-                            '${chipsInCart.length}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(100.0),
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 16.0),
-                        const Column(
-                          children: [
-                            Text(
-                              "Cart",
+                            child: Text(
+                              '${chipsInCart.length}',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              '1 item',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
+                          ),
+                          const SizedBox(width: 16.0),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Cart",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    AvatarGroup(
-                      avatars: chipsInCart
-                          .map((product) => product.imageUrl)
-                          .toList(),
-                      avatarSize: 50.0,
-                      maxVisibleAvatars: 4,
-                    ),
-                  ],
+                              Text(
+                                '1 item',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      AvatarGroup(
+                        avatars: chipsInCart
+                            .map((product) => product.imageUrl)
+                            .toList(),
+                        avatarSize: 50.0,
+                        maxVisibleAvatars: 4,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-      ]),
+        ],
+      ),
     );
   }
 }
