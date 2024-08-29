@@ -1,6 +1,4 @@
-It seems that the message got cut off. Here's the full `README.md`:
 
-```markdown
 # Chips Collection
 
 Chips Collection is a Flutter-based e-commerce UI project designed to showcase a fast food ordering experience. This project focuses on creating a clean, modern, and user-friendly design for an e-commerce application that allows users to browse fast food items, add them to the cart, and proceed to payment.
