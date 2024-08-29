@@ -130,11 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: [
-            SingleChildScrollView(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   Row(
@@ -195,7 +195,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           );
-
                           setState(() {
                             chipsInCart.add(chipItems[index]);
                             chipItems.remove(chipItems[index]);
@@ -204,81 +203,84 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
+                  const SizedBox(height: 100.0),
                 ],
               ),
             ),
-            if (chipsInCart.isNotEmpty)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 100.0,
-                  margin: const EdgeInsets.only(top: 16.0),
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(25.0),
-                      topRight: Radius.circular(25.0),
-                    ),
+          ),
+          if (chipsInCart.isNotEmpty)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 100.0,
+                margin: const EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(100.0),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: Text(
+                            '${chipsInCart.length}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                            child: Text(
-                              '${chipsInCart.length}',
-                              textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        const Column(
+                          children: [
+                            Text(
+                              "Cart",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Colors.white,
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          const Column(
-                            children: [
-                              Text("Cart",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              Text(
-                                '1 item',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
+                            Text(
+                              '1 item',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                      AvatarGroup(
-                        avatars: chipsInCart
-                            .map((product) => product.imageUrl)
-                            .toList(),
-                        avatarSize: 50.0,
-                        maxVisibleAvatars: 4,
-                      ),
-                    ],
-                  ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    AvatarGroup(
+                      avatars: chipsInCart
+                          .map((product) => product.imageUrl)
+                          .toList(),
+                      avatarSize: 50.0,
+                      maxVisibleAvatars: 4,
+                    ),
+                  ],
                 ),
-              )
-          ],
-        ),
+              ),
+            )
+        ],
       ),
     );
   }
