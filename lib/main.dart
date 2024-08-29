@@ -1,5 +1,5 @@
 import 'package:chips_collection/Routes/route.dart';
-import 'package:chips_collection/Screens/cart.dart';
+import 'package:chips_collection/Screens/products.dart';
 import 'package:chips_collection/Screens/checkout.dart';
 import 'package:chips_collection/Screens/home.dart';
 import 'package:chips_collection/Screens/product_datails.dart';
@@ -32,7 +32,7 @@ final GoRouter _router = GoRouter(
         name: RoutesNames.cart,
         path: '/cart',
         builder: (context, state) {
-          return const CartScreen();
+          return const ProductsScreen();
         }),
     GoRoute(
       name: RoutesNames.product,
