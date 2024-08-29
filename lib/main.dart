@@ -1,4 +1,5 @@
 import 'package:chips_collection/Routes/route.dart';
+import 'package:chips_collection/Screens/cart_screen.dart';
 import 'package:chips_collection/Screens/products.dart';
 import 'package:chips_collection/Screens/checkout.dart';
 import 'package:chips_collection/Screens/home.dart';
@@ -30,13 +31,13 @@ final GoRouter _router = GoRouter(
         }),
     GoRoute(
         name: RoutesNames.cart,
-        path: '/cart',
+        path: '/products',
         builder: (context, state) {
           return const ProductsScreen();
         }),
     GoRoute(
       name: RoutesNames.product,
-      path: '/product/:id',
+      path: '/products/:id',
       builder: (context, state) {
         return ProductDetailsScreen(id: state.pathParameters['id']);
       },
@@ -45,7 +46,9 @@ final GoRouter _router = GoRouter(
       name: RoutesNames.checkout,
       path: '/checkout',
       builder: (context, state) {
-        return const CheckoutScreen();
+        return const CartScreen(
+          productsInCart: [],
+        );
       },
     ),
   ],

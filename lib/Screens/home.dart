@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -96,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
       imageUrl: 'assets/product/chips.jpg',
     ),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return ProductCard(
                         product: chipItems[index],
+                        onTap: () {
+                          // context.go('/product/${chipItems[index].id}');
+                        },
                         onAddToCart: () {
                           // ScaffoldMessenger.of(context).showSnackBar(
                           //   SnackBar(
@@ -216,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  context.go('/cart', extra: {'products': chipsInCart});
+                  context.go('/products', extra: {'products': chipsInCart});
                 },
                 child: Container(
                   height: 100.0,

@@ -50,7 +50,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                context.go("/");
               },
               icon: const Icon(
                 Icons.line_style_outlined,
@@ -61,7 +61,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       ),
       body: Stack(children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               // Filter categories
@@ -86,7 +86,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               const SizedBox(height: 16.0),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -133,6 +133,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             .length,
                     itemBuilder: (context, index) {
                       return ProductCard(
+                        onTap: () {
+                          context.go(
+                              '/products/${selectedCategory.name == 'All' ? products[index].id : products.where((element) => element.category == selectedCategory.name).toList()[index].id}',
+                              extra: {
+                                'product': selectedCategory.name == 'All'
+                                    ? products[index]
+                                    : products
+                                        .where((element) =>
+                                            element.category ==
+                                            selectedCategory.name)
+                                        .toList()[index]
+                              });
+                        },
                         paddingH: 24.0,
                         paddingV: 12.0,
                         titleFontSize: 28.0,
@@ -160,87 +173,86 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   ),
                 ),
               ),
-              if (chipsInCart.isNotEmpty)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      context.go('/cart', extra: {'products': chipsInCart});
-                    },
-                    child: Container(
-                      height: 100.0,
-                      margin: const EdgeInsets.only(top: 16.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(25.0),
-                          topRight: Radius.circular(25.0),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 50,
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(100.0),
-                                ),
-                                child: Text(
-                                  '${chipsInCart.length}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16.0),
-                              const Column(
-                                children: [
-                                  Text(
-                                    "Cart",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '1 item',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          AvatarGroup(
-                            avatars: chipsInCart
-                                .map((product) => product.imageUrl)
-                                .toList(),
-                            avatarSize: 50.0,
-                            maxVisibleAvatars: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
             ],
           ),
-        )
+        ),
+        if (chipsInCart.isNotEmpty)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                context.go('/cart', extra: {'products': chipsInCart});
+              },
+              child: Container(
+                height: 100.0,
+                margin: const EdgeInsets.only(top: 2.0),
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: Text(
+                            '${chipsInCart.length}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        const Column(
+                          children: [
+                            Text(
+                              "Cart",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '1 item',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    AvatarGroup(
+                      avatars: chipsInCart
+                          .map((product) => product.imageUrl)
+                          .toList(),
+                      avatarSize: 50.0,
+                      maxVisibleAvatars: 4,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
       ]),
     );
   }
@@ -262,7 +274,6 @@ class FilterCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('FilterCategory build $index $isSelected');
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -279,7 +290,7 @@ class FilterCategory extends StatelessWidget {
               Icon(
                 category.icon,
                 color: isSelected
-                    ? Colors.white
+                    ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).colorScheme.onSurface,
               ),
             const SizedBox(width: 8.0),
