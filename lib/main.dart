@@ -1,7 +1,6 @@
 import 'package:chips_collection/Routes/route.dart';
 import 'package:chips_collection/Screens/cart_screen.dart';
 import 'package:chips_collection/Screens/products.dart';
-import 'package:chips_collection/Screens/checkout.dart';
 import 'package:chips_collection/Screens/home.dart';
 import 'package:chips_collection/Screens/product_datails.dart';
 import 'package:flutter/material.dart';

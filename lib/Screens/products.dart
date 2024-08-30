@@ -36,11 +36,25 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     fontSize: 34.0,
                   ),
                 ),
-                Text(
-                  'Best Of Snacks',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 30.0,
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Best Of',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 34.0,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' Snacks',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 34.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -50,7 +64,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 context.go("/");
               },
               icon: const Icon(
-                Icons.line_style_outlined,
+                Icons.menu,
               ),
             )
           ],
@@ -118,41 +132,50 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 const SizedBox(height: 16.0),
                 // Products
                 Expanded(
-                  child: PageView.builder(
-                    itemCount: selectedCategory.name == 'All'
-                        ? products.length
-                        : products
-                            .where((element) =>
-                                element.category == selectedCategory.name)
-                            .length,
-                    itemBuilder: (context, index) {
-                      final product = selectedCategory.name == 'All'
-                          ? products[index]
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 10,
+                    ),
+                    child: PageView.builder(
+                      itemCount: selectedCategory.name == 'All'
+                          ? products.length
                           : products
                               .where((element) =>
                                   element.category == selectedCategory.name)
-                              .toList()[index];
+                              .length,
+                      itemBuilder: (context, index) {
+                        final product = selectedCategory.name == 'All'
+                            ? products[index]
+                            : products
+                                .where((element) =>
+                                    element.category == selectedCategory.name)
+                                .toList()[index];
 
-                      return ProductCard(
-                        onTap: () {
-                          context.go(
-                            '/products/${product.id}',
-                            extra: {'product': product},
-                          );
-                        },
-                        paddingH: 24.0,
-                        paddingV: 12.0,
-                        titleFontSize: 28.0,
-                        paddingIcon: 16.0,
-                        borderRadius: 40.0,
-                        onAddToCart: () {
-                          setState(() {
-                            chipsInCart.add(product);
-                          });
-                        },
-                        product: product,
-                      );
-                    },
+                        return ProductCard(
+                          onTap: () {
+                            context.go(
+                              '/products/${product.id}',
+                              extra: {'product': product},
+                            );
+                          },
+                          paddingH: 4.0,
+                          paddingV: 2.0,
+                          titleFontSize: 34.0,
+                          paddingIcon: 16.0,
+                          borderRadius: 40.0,
+                          paddingIconH: 24.0,
+                          paddingIconV: 16.0,
+                          titleWidth: MediaQuery.of(context).size.width * 0.6,
+                          onAddToCart: () {
+                            setState(() {
+                              chipsInCart.add(product);
+                            });
+                          },
+                          product: product,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

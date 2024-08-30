@@ -1,5 +1,6 @@
 import 'package:chips_collection/Model/product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -8,8 +9,11 @@ class ProductCard extends StatelessWidget {
   final double? paddingH;
   final double? paddingV;
   final double? paddingIcon;
+  final double? paddingIconH;
+  final double? paddingIconV;
   final double? borderRadius;
   final VoidCallback onTap;
+  final double? titleWidth;
 
   const ProductCard({
     super.key,
@@ -18,7 +22,10 @@ class ProductCard extends StatelessWidget {
     this.paddingH,
     this.paddingV,
     this.paddingIcon,
+    this.paddingIconH,
+    this.paddingIconV,
     this.borderRadius,
+    this.titleWidth,
     required this.onAddToCart,
     required this.onTap,
   });
@@ -31,13 +38,13 @@ class ProductCard extends StatelessWidget {
       },
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 15.0),
+          borderRadius: BorderRadius.circular(borderRadius ?? 24.0),
         ),
         elevation: 5,
         child: Stack(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius ?? 15.0),
+              borderRadius: BorderRadius.circular(borderRadius ?? 24.0),
               child: Image.asset(
                 product.imageUrl,
                 width: double.infinity,
@@ -57,25 +64,32 @@ class ProductCard extends StatelessWidget {
             // Title at the top
             Positioned(
               top: 16,
-              left: 16,
-              right: 16,
-              child: Text(
-                product.title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: titleFontSize ?? 18,
-                  fontWeight: FontWeight.bold,
+              left: 10,
+              right: 10,
+              child: SizedBox(
+                width: titleWidth,
+                child: Positioned(
+                  child: Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: titleFontSize ?? 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
             // Category container below the title
             Positioned(
-              top: 70,
+              top: 56,
               // left: 16,
               // right: 16,
               child: Container(
                 margin:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12.0,
                   vertical: 6.0,
@@ -101,8 +115,8 @@ class ProductCard extends StatelessWidget {
               right: 16,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: paddingH ?? 16.0,
-                  vertical: paddingV ?? 8.0,
+                  horizontal: paddingH ?? 4.0,
+                  vertical: paddingV ?? 4.0,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.8),
@@ -111,19 +125,23 @@ class ProductCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '\$${product.price.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        '\$${product.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     GestureDetector(
                       onTap: onAddToCart,
                       child: Container(
-                        padding: EdgeInsets.all(
-                          paddingIcon ?? 8.0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: paddingIconH ?? 16.0,
+                          vertical: paddingIconV ?? 8.0,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black,
@@ -131,6 +149,7 @@ class ProductCard extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.add_shopping_cart,
+                          size: 12,
                           color: Colors.white,
                         ),
                       ),
